@@ -1,27 +1,27 @@
 package es.urjc.code.security;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class WebController {
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public String index() {
         return "index";
     }
 
-    @RequestMapping("/login")
+    @GetMapping("/login")
     public String login() {
     	return "login";
     }
     
-    @RequestMapping("/loginerror")
+    @GetMapping("/loginerror")
     public String loginerror() {
     	return "loginerror";
     }
 
-    @RequestMapping("/home")
+    @GetMapping("/home")
     public String home() {
         return "home";
     }

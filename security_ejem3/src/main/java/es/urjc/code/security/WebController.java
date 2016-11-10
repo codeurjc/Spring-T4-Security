@@ -5,17 +5,17 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class WebController {
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public String index() {
         return "index";
     }
 
-    @RequestMapping("/login")
+    @GetMapping("/login")
     public String login(Model model, HttpServletRequest request) {
     	
     	CsrfToken token = (CsrfToken) request.getAttribute("_csrf"); 
@@ -24,12 +24,12 @@ public class WebController {
     	return "login";
     }
     
-    @RequestMapping("/loginerror")
+    @GetMapping("/loginerror")
     public String loginerror() {
     	return "loginerror";
     }
 
-    @RequestMapping("/home")
+    @GetMapping("/home")
     public String home(Model model, HttpServletRequest request) {
     	
     	CsrfToken token = (CsrfToken) request.getAttribute("_csrf"); 
