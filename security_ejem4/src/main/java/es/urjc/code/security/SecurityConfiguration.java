@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -37,11 +39,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {
     	
+    	PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    	
         // Users
-        auth.inMemoryAuthentication().withUser("user").password("pass")
+        auth.inMemoryAuthentication().withUser("user").password(encoder.encode("pass"))
                 .roles("USER");
         
-        auth.inMemoryAuthentication().withUser("admin").password("adminpass")
+        auth.inMemoryAuthentication().withUser("admin").password(encoder.encode("adminpass"))
                 .roles("USER", "ADMIN");
     }
 }

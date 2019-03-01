@@ -4,13 +4,13 @@
 	
 	<groupId>es.urjc.code</groupId>
 	<artifactId>security_ejem3b</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.4.1.RELEASE</version>
+		<version>2.1.2.RELEASE</version>
 	</parent>
 
 	<properties>
