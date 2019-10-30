@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
 public class Application {
@@ -16,12 +15,12 @@ public class Application {
 	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurerAdapter() {
+		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "POST", "OPTIONS", "PUT", "DELETE")
 						.allowedHeaders("Authorization", "Content-Type", "X-Requested-With", "accept", "Origin",
-								"Access-Control-Request-Method", "Access-Control-Request-Headers")
+								"Access-Control-Request-Method", "Access-Control-Request-Headers","x-xsrf-token")
 						.exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
 						.allowCredentials(true).maxAge(3600);
 			}

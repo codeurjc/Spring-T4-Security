@@ -3,9 +3,7 @@ package es.urjc.code.daw.library.book;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 import es.urjc.code.daw.library.user.User;
 import es.urjc.code.daw.library.user.UserRepository;
@@ -37,7 +35,7 @@ public class DatabaseInitializer {
 
 		// Sample users
 
-		userRepository.save(new User("user", "pass", "ROLE_USER"));
+		userRepository.save(new User("michel", "pass", "ROLE_USER"));
 		userRepository.save(new User("admin", "pass", "ROLE_USER", "ROLE_ADMIN"));
 	}
 

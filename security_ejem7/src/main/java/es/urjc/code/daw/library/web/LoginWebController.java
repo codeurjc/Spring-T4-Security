@@ -8,9 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class LoginWebController {
 	
 	@RequestMapping("/login")
-	public String showBooks(Model model) {
+	public String login(Model model) {
 
 		return "login";
 	}
+
+	@RequestMapping("/loginerror")
+	public String loginerror(Model model) {
+		return "loginerror";
+	}
+
+
+	
 
 }

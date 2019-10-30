@@ -1,12 +1,14 @@
 package es.urjc.code.daw.library.web;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import es.urjc.code.daw.library.book.Book;
 import es.urjc.code.daw.library.book.BookService;
@@ -36,7 +38,7 @@ public class BookWebController {
 	}
 	
 	
-	@RequestMapping("/")
+	@GetMapping("/")
 	public String showBooks(Model model) {
 
 		model.addAttribute("books", service.findAll());
@@ -44,35 +46,42 @@ public class BookWebController {
 		return "books";
 	}
 	
-	@RequestMapping("/books/{id}")
+	@GetMapping("/books/{id}")
 	public String showBook(Model model, @PathVariable long id) {
 		
-		Book book = service.findOne(id);
-
-		model.addAttribute("book", book);
-
-		return "book";
+		Optional<Book> op = service.findOne(id);
+		if(op.isPresent()) {
+			Book book = op.get();
+			model.addAttribute("book", book);
+			return "book";
+		}else {
+			return "books";
+		}
+		
 	}
 	
-	@RequestMapping("/removebook/{id}")
+	@GetMapping("/removebook/{id}")
 	public String removeBook(Model model, @PathVariable long id) {
 		
-		Book book = service.findOne(id);
-
-		service.delete(id);
+		Optional<Book> op = service.findOne(id);
+		if(op.isPresent()) {
+			Book book = op.get();
+			service.delete(id);
+			model.addAttribute("book", book);
+			return "removedbook";
+		}else {
+			return "removedbook";
+		}
 		
-		model.addAttribute("book", book);
-
-		return "removedbook";
 	}
 	
-	@RequestMapping(value="/newbook", method=RequestMethod.GET)
+	@GetMapping("/newbook")
 	public String newBook(Model model) {
 		
 		return "newBookPage";
 	}
 	
-	@RequestMapping(value="/newbook", method=RequestMethod.POST)
+	@PostMapping("/newbook")
 	public String newBookProcess(Book book) {
 		
 		
@@ -81,17 +90,21 @@ public class BookWebController {
 		return "bookCreated";
 	}
 	
-	@RequestMapping(value="/editbook/{id}", method=RequestMethod.GET)
+	@GetMapping("/editbook/{id}")
 	public String editBook(Model model, @PathVariable long id) {
 		
-		Book book = service.findOne(id);
-
-		model.addAttribute("book", book);
+		Optional<Book> op = service.findOne(id);
+		if(op.isPresent()) {
+			Book book = op.get();
+			model.addAttribute("book", book);
+			return "editBookPage";
+		}else {
+			return "books";
+		}
 		
-		return "editBookPage";
 	}
 	
-	@RequestMapping(value="/editbook", method=RequestMethod.POST)
+	@PostMapping("/editbook")
 	public String editBookProcess(Book book) {
 		
 		

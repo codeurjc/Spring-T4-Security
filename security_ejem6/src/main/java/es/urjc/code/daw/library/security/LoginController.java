@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.urjc.code.daw.library.user.User;
@@ -27,7 +27,7 @@ public class LoginController {
 	@Autowired
 	private UserComponent userComponent;
 
-	@RequestMapping("/logIn")
+	@GetMapping("/logIn")
 	public ResponseEntity<User> logIn() {
 
 		if (!userComponent.isLoggedUser()) {
@@ -40,8 +40,8 @@ public class LoginController {
 		}
 	}
 
-	@RequestMapping("/logOut")
-	public ResponseEntity<Boolean> logOut(HttpSession session) {
+	@GetMapping("/logOut")
+	public ResponseEntity<String> logOut(HttpSession session) {
 
 		if (!userComponent.isLoggedUser()) {
 			log.info("No user logged");
@@ -49,7 +49,7 @@ public class LoginController {
 		} else {
 			session.invalidate();
 			log.info("Logged out");
-			return new ResponseEntity<>(true, HttpStatus.OK);
+			return new ResponseEntity<>("Logged out", HttpStatus.OK);
 		}
 	}
 

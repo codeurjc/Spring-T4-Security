@@ -1,6 +1,7 @@
 package es.urjc.code.daw.library.book;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,12 @@ public class BookService {
 	@Autowired
 	private BookRepository repository;
 
-	public Book findOne(long id) {
-		return repository.findOne(id);
+	public Optional<Book> findOne(long id) {
+		return repository.findById(id);
+	}
+	
+	public boolean exist(long id) {
+		return repository.existsById(id);
 	}
 
 	public List<Book> findAll() {
@@ -27,6 +32,6 @@ public class BookService {
 	}
 
 	public void delete(long id) {
-		repository.delete(id);
+		repository.deleteById(id);
 	}
 }

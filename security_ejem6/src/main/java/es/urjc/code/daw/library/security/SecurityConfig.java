@@ -28,13 +28,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public UserRepositoryAuthProvider userRepoAuthProvider;
+	
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+		// Database authentication provider
+		auth.authenticationProvider(userRepoAuthProvider);
+	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
 		configureUrlAuthorization(http);
 
-		// Disable CSRF protection (it is difficult to implement with ng2)
+		// Disable CSRF protection
 		http.csrf().disable();
 
 		// Use Http Basic Authentication
@@ -57,10 +64,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().anyRequest().permitAll();
 	}
 
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-		// Database authentication provider
-		auth.authenticationProvider(userRepoAuthProvider);
-	}
+	
 }

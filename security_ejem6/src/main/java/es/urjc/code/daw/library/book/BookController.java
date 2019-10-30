@@ -7,11 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,53 +25,49 @@ public class BookController {
 	@Autowired
 	private BookRepository repository;
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@GetMapping("/")
 	public Collection<Book> getBooks() {
 		return repository.findAll();
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@GetMapping("/{id}")
 	public ResponseEntity<Book> getBook(@PathVariable long id) {
 
 		log.info("Get book {}", id);
-
-		Book anuncio = repository.findOne(id);
-		if (anuncio != null) {
-			return new ResponseEntity<>(anuncio, HttpStatus.OK);
+		
+		if (repository.existsById(id)) {
+			Book book = repository.getOne(id);
+			return new ResponseEntity<>(book, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.CREATED)
-	public Book createBook(@RequestBody Book anuncio) {
-
-		repository.save(anuncio);
-
-		return anuncio;
+	@PostMapping("/")
+	public ResponseEntity<Book> createBook(@RequestBody Book book) {
+		
+		Book savedBook = repository.save(book);
+		
+		return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@PutMapping("/{id}")
 	public ResponseEntity<Book> updateBook(@PathVariable long id, @RequestBody Book updatedBook) {
-
-		Book anuncio = repository.findOne(id);
-		if (anuncio != null) {
-
+		
+		if (repository.existsById(id)) {
 			updatedBook.setId(id);
 			repository.save(updatedBook);
-
 			return new ResponseEntity<>(updatedBook, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Book> deleteBook(@PathVariable long id) {
 
-		if (repository.exists(id)) {
-			repository.delete(id);
+		if (repository.existsById(id)) {
+			repository.deleteById(id);
 			return new ResponseEntity<>(null, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
