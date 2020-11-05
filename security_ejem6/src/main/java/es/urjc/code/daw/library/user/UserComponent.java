@@ -1,9 +1,7 @@
 package es.urjc.code.daw.library.user;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.annotation.SessionScope;
 
 /**
  * This class is designed to manage the information for the user while he is
@@ -19,7 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
  */
 
 @Component
-@Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
+@SessionScope
 public class UserComponent {
 
 	private User user;

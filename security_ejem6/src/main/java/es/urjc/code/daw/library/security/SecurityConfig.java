@@ -28,18 +28,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public UserRepositoryAuthProvider userRepoAuthProvider;
-	
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-		// Database authentication provider
-		auth.authenticationProvider(userRepoAuthProvider);
-	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		configureUrlAuthorization(http);
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/logIn").authenticated();
+
+		// URLs that need authentication to access to it
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/books/**").hasRole("USER");
+		http.authorizeRequests().antMatchers(HttpMethod.PUT, "/books/**").hasRole("USER");
+		http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/books/**").hasRole("ADMIN");		
+
+		// Other URLs can be accessed without authentication
+		http.authorizeRequests().anyRequest().permitAll();
 
 		// Disable CSRF protection
 		http.csrf().disable();
@@ -51,18 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.logout().logoutSuccessHandler((rq, rs, a) -> {	});
 	}
 
-	private void configureUrlAuthorization(HttpSecurity http) throws Exception {
-
-		// APP: This rules have to be changed by app developer
-
-		// URLs that need authentication to access to it
-		http.authorizeRequests().antMatchers(HttpMethod.POST, "/books/**").hasRole("USER");
-		http.authorizeRequests().antMatchers(HttpMethod.PUT, "/books/**").hasRole("USER");
-		http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/books/**").hasRole("ADMIN");		
-
-		// Other URLs can be accessed without authentication
-		http.authorizeRequests().anyRequest().permitAll();
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		// Database authentication provider
+		auth.authenticationProvider(userRepoAuthProvider);
 	}
-
-	
 }

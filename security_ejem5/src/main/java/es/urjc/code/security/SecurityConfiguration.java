@@ -37,6 +37,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         // Logout
         http.logout().logoutUrl("/logout");
         http.logout().logoutSuccessUrl("/");
+        
+        // Allow H2 console
+        http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
+        http.csrf().ignoringAntMatchers("/h2-console/**");
+        http.headers().frameOptions().sameOrigin();
     }
 
     @Override
